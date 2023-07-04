@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final dio = Dio();
-
-    // localhost
-    final emulatorIp = '10.0.2.2:3000';
-    final simulatorIp = '127.0.0.1:3000';
-    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -84,8 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     final refreshToken = response.data['refreshToken'];
                     final accessToken = response.data['accessToken'];
 
-                    await storage.write(key: refreshTokenKey, value: refreshToken);
-                    await storage.write(key: accessTokenKey, value: accessToken);
+                    await storage.write(
+                        key: refreshTokenKey, value: refreshToken);
+                    await storage.write(
+                        key: accessTokenKey, value: accessToken);
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -99,20 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text('로그인'),
                 ),
                 TextButton(
-                  onPressed: () async {
-                    final refreshToken =
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY4ODEwNDQzOSwiZXhwIjoxNjg4MTkwODM5fQ.HkYC3Z1qOCvq8i6mWvfB84UndChaVF7K3PG6io4CbiI';
-                    final response = await dio.post(
-                      'http://$ip/auth/token',
-                      options: Options(
-                        headers: {
-                          'authorization': 'Bearer $refreshToken',
-                        },
-                      ),
-                    );
-
-                    print(response.data);
-                  },
+                  onPressed: () async {},
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,
                   ),
