@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced/common/const/colors.dart';
 import 'package:flutter_advanced/common/const/data.dart';
@@ -24,21 +25,31 @@ class _SplashScreenState extends State<SplashScreen> {
     final refreshToken = await storage.read(key: refreshTokenKey);
     final accessToken = await storage.read(key: accessTokenKey);
 
-    if (refreshToken == null || accessToken == null) {
+    final dio = Dio();
+
+    try {
+      final response = await dio.post(
+        'http://$ip/auth/token',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $refreshToken',
+          },
+        ),
+      );
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => RootTab(),
+        ),
+        (route) => false,
+      );
+    } catch (e) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => LoginScreen(),
         ),
         (route) => false,
       );
-      return;
     }
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => RootTab(),
-      ),
-          (route) => false,
-    );
   }
 
   void deleteToken() async {
