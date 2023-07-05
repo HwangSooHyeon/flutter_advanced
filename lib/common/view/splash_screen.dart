@@ -36,6 +36,12 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         ),
       );
+
+      await storage.write(
+        key: accessTokenKey,
+        value: response.data['accessToken'],
+      );
+
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => RootTab(),
