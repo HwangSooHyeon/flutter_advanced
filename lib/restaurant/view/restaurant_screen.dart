@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced/common/component/pagination_list_view.dart';
 import 'package:flutter_advanced/restaurant/component/restaurant_card.dart';
+import 'package:flutter_advanced/restaurant/provider/restaurant_provider.dart';
+import 'package:flutter_advanced/restaurant/view/restaurant_detail_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class RestaurantScreen extends StatelessWidget {
-  const RestaurantScreen({Key? key}) : super(key: key);
+  const RestaurantScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: RestaurantCard(
-            image: Image.asset('asset/img/food/ddeok_bok_gi.jpg',fit: BoxFit.cover,),
-            name: '불타는 떡볶이',
-            tags: ['떡볶이', '치즈', '매운맛'],
-            ratingCount: 100,
-            deliveryTime: 15,
-            deliveryFee: 2000,
-            rating: 4.52,
+    return PaginationListView(
+      provider: restaurantProvider,
+      itemBuilder: <RestaurantModel>(_, index, model) {
+        return GestureDetector(
+          onTap: () {
+            context.goNamed(RestaurantDetailScreen.routeName, pathParameters: {
+              'rid': model.id,
+            });
+          },
+          child: RestaurantCard.fromModel(
+            model: model,
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
